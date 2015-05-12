@@ -1,12 +1,10 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-  echo "USAGE: xcode_action [action]"
+  echo "USAGE: android_studio_action [action]"
   echo "action:"
   echo "  build"
   echo "  run"
-  echo "  clean"
-  echo "  test"
   echo "  openfile FileName:row"
   exit 1
 fi
@@ -15,20 +13,18 @@ ACTION=$1
 echo "action: ${ACTION}"
 
 if [ "build" = "${ACTION}" ]; then
-  COMMAND="keystroke \"b\" using {command down}"
+  # key code 101 represents F9
+  COMMAND="key code 101 using {command down}"
 elif [ "run" = "${ACTION}" ]; then
-  COMMAND="keystroke \"r\" using {command down}"
-elif [ "clean" = "${ACTION}" ]; then
-  COMMAND="keystroke \"k\" using {shift down, command down}"
-elif [ "test" = "${ACTION}" ]; then
-  COMMAND="keystroke \"u\" using {command down}"
+  COMMAND="keystroke \"r\" using {control down}"
 elif [ "openfile" = "${ACTION}" ]; then
   FILENAME=$2
   echo "filename: ${FILENAME}"
   COMMAND="
     keystroke \"o\" using {shift down, command down}
     keystroke \"${FILENAME}\"
-    key code {52}
+    delay 0.3
+    key code 36
   "
 else
   COMMAND=""
@@ -37,9 +33,9 @@ fi
 echo "command: ${COMMAND}"
 
 SCRIPT="
-  tell application \"Xcode\" to activate
+  tell application \"Android Studio\" to activate
   tell application \"System Events\"
-    tell process \"Xcode\"
+    tell process \"Android Studio\"
       delay 0.5
       ${COMMAND}
     end tell

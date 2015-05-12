@@ -1,7 +1,8 @@
-" xcode-actions.vim - Operate Xcode from Vim {{{
+" android-studio-actions.vim - Operate Android Studio from Vim {{{
 " Version: 0.0.1
 " Copyright (C) 2014 Yuta ToKoRo <https://github.com/tokorom/>
-" Last Modified: April 28, 2014
+" Copyright (C) 2015 Paradoxiology <https://github.com/paradoxiology/>
+" Last Modified: May 12, 2015
 " License: MIT license {{{
 " Permission is hereby granted, free of charge, to any person obtaining
 " a copy of this software and associated documentation files (the
@@ -24,52 +25,21 @@
 " }}}
 " }}}
 
-" initialize "{{{
+if exists('g:loaded_android_studio_actions') "{{{
+  finish
+endif "}}}
 
-let spath = expand('<sfile>:p')
-let s:xcode_actions_script = spath[0 : strridx(spath, 'autoload') - 1] . 'bin/xcode_actions'
+command! AstudioActionsBuild    :call android_studio_actions#build()
+command! AstudioActionsRun      :call android_studio_actions#run()
+command! AstudioActionsOpenFile :call android_studio_actions#openfile(android_studio_actions#current_file())
 
-"}}}
-
-" public functions "{{{
-
-function! xcode_actions#build() "{{{
-  call s:execute_xcode_actions_script('build', '')
-endfunction "}}}
-
-function! xcode_actions#run() "{{{
-  call s:execute_xcode_actions_script('run', '')
-endfunction "}}}
-
-function! xcode_actions#clean() "{{{
-  call s:execute_xcode_actions_script('clean', '')
-endfunction "}}}
-
-function! xcode_actions#test() "{{{
-  call s:execute_xcode_actions_script('test', '')
-endfunction "}}}
-
-function! xcode_actions#openfile(filename) "{{{
-  call s:execute_xcode_actions_script('openfile', a:filename)
-endfunction "}}}
-
-function! xcode_actions#current_file() "{{{
-  let filename = expand('%:t')
-  let line = line('.')
-  return filename . ':' . line
-endfunction "}}}
-
-"}}}
-
-" private functions "{{{
-
-function! s:execute_xcode_actions_script(action, arg) "{{{
-  let command = s:xcode_actions_script . ' ' . a:action . ' ' . a:arg
-  call system(command)
-endfunction "}}}
-
-"}}}
+nnoremap <silent> <Plug>(android-studio-actions-build)      :<C-u>AstudioActionsBuild<Return>
+nnoremap <silent> <Plug>(android-studio-actions-run)        :<C-u>AstudioActionsRun<Return>
+nnoremap <silent> <Plug>(android-studio-actions-openfile)   :<C-u>AstudioActionsOpenFile<Return>
 
 " Fin. "{{{
+
+let g:loaded_android_studio_actions = 1
+
 " __END__
 " vim: foldmethod=marker
