@@ -49,7 +49,8 @@ endfunction "}}}
 function! android_studio_actions#current_file() "{{{
   let filename = expand('%:t')
   let line = line('.')
-  return filename . ':' . line
+  let column = virtcol('.')
+  return filename . ':' . line . ',' . column
 endfunction "}}}
 
 "}}}
